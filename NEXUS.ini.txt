@@ -1,0 +1,101 @@
+
+[Rainmeter]
+Update=1000
+AccurateText=1
+DynamicWindowSize=1
+
+[Metadata]
+Name=NEXUS
+Author=Meu Projeto
+Information=Central futurista azul e roxo
+Version=1.0
+
+[Variables]
+Blue=81,200,255,255
+Purple=167,139,250,255
+White=237,242,255,255
+Muted=146,159,190,255
+Background=9,14,32,235
+Font=Segoe UI
+
+[MeasureTime]
+Measure=Time
+Format=%H:%M:%S
+
+[MeasureDate]
+Measure=Time
+Format=%d/%m/%Y
+
+[MeterBackground]
+Meter=Shape
+Shape=Rectangle 0,0,350,190,18 | Fill Color #Background# | StrokeWidth 1 | Stroke Color 81,137,255,180
+W=350
+H=190
+
+[MeterAccent]
+Meter=Shape
+Shape=Rectangle 18,18,3,35,1 | Fill Color #Blue# | StrokeWidth 0
+
+[MeterTitle]
+Meter=String
+X=32
+Y=17
+FontFace=#Font#
+FontSize=11
+FontWeight=700
+FontColor=#Blue#
+AntiAlias=1
+Text=N E X U S
+
+[MeterSubtitle]
+Meter=String
+X=32
+Y=36
+FontFace=#Font#
+FontSize=8
+FontColor=#Muted#
+AntiAlias=1
+Text=PERSONAL COMMAND SYSTEM
+
+[MeterClock]
+Meter=String
+MeasureName=MeasureTime
+X=18
+Y=65
+FontFace=#Font#
+FontSize=35
+FontColor=#White#
+AntiAlias=1
+Text=%1
+
+[MeterDate]
+Meter=String
+MeasureName=MeasureDate
+X=20
+Y=116
+FontFace=#Font#
+FontSize=10
+FontColor=#Purple#
+AntiAlias=1
+Text=%1
+
+[MeterStatus]
+Meter=String
+X=20
+Y=153
+FontFace=#Font#
+FontSize=9
+FontColor=100,245,190,255
+AntiAlias=1
+Text=● SYSTEM ONLINE
+
+[MeterFooter]
+Meter=String
+X=330
+Y=153
+StringAlign=Right
+FontFace=#Font#
+FontSize=8
+FontColor=#Muted#
+AntiAlias=1
+Text=VERSION 1.0
