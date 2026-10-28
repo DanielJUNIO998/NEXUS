@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS AI</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; padding: 25px;
+  background: radial-gradient(ellipse at top, #102c42, #03070e 75%);
+  color: #d9faff; font-family: "Segoe UI", sans-serif;
+  display: grid; place-items: center;
+}
+main { width: min(700px, 100%); text-align: center; }
+h1 { letter-spacing: 8px; color: #7beeff; text-shadow: 0 0 18px #00cfff; }
+.orb {
+  margin: 28px auto; width: 130px; height: 130px;
+  border-radius: 50%; position: relative;
+  border: 2px solid #64eaff;
+  background: radial-gradient(circle at 35% 30%, white, #27c9ff 5%, #075caa 25%, #020b20 70%);
+  box-shadow: 0 0 25px #00cfff, 0 0 60px #087dff70, inset 0 0 30px #6ff5ff;
+  animation: pulse 3s infinite ease-in-out;
+}
+.orb::before, .orb::after {
+  content: ""; position: absolute; inset: -17px;
+  border: 1px solid #48e5ff; border-radius: 50%;
+  transform: rotateX(65deg); animation: spin 8s linear infinite;
+}
+.orb::after { inset: -7px; transform: rotateY(65deg); animation-duration: 5s; }
+.core { position: absolute; inset: 43px; border-radius: 50%; background: #d9ffff; box-shadow: 0 0 28px white; }
+.status { color: #69ffce; font-size: 12px; letter-spacing: 3px; }
+.chat {
+  margin-top: 30px; padding: 18px; text-align: left;
+  background: #071522dd; border: 1px solid #1d526b;
+  border-radius: 12px; box-shadow: 0 0 25px #00cfff15;
+}
+#messages { height: 180px; overflow-y: auto; padding: 8px; }
+.msg { margin: 10px 0; line-height: 1.5; overflow-wrap: anywhere; }
+.user { color: #7beeff; }
+.nexus { color: #69ffce; }
+.entry { display: flex; gap: 8px; margin-top: 12px; }
+input {
+  flex: 1; min-width: 0; padding: 13px; border-radius: 8px;
+  border: 1px solid #24627c; background: #020b13; color: white;
+  outline: none;
+}
+button {
+  padding: 12px 18px; border: 0; border-radius: 8px;
+  color: #001018; background: #64eaff; font-weight: bold; cursor: pointer;
+}
+button:hover { background: white; }
+small { color: #83aabd; }
+@keyframes pulse { 50% { transform: scale(1.06); filter: brightness(1.3); } }
+@keyframes spin { to { rotate: 360deg; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>NEXUS AI</h1>
+  <div class="orb"><div class="core"></div></div>
+  <div class="status">● NÚCLEO ONLINE</div>
+
+  <section class="chat">
+    <div id="messages">
+      <div class="msg nexus"><b>NEXUS:</b> Interface iniciada. Aguardando sua mensagem.</div>
+    </div>
+    <form class="entry" id="chatForm">
+      <input id="userInput" placeholder="Digite sua mensagem..." autocomplete="off">
+      <button type="submit">ENVIAR</button>
+    </form>
+  </section>
+  <p><small>PROTÓTIPO 01 • MODO DE TESTE</small></p>
+</main>
+
+<script>
+
+const form = document.getElementById("chatForm");
+const input = document.getElementById("userInput");
+const messages = document.getElementById("messages");
+const sendButton = form.querySelector("button");
+
+form.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const text = input.value.trim();
+  if (!text) return;
+
+  const userMessage = document.createElement("div");
+  userMessage.className = "msg user";
+  userMessage.textContent = "VOCÊ: " + text;
+  messages.appendChild(userMessage);
+
+  input.value = "";
+  input.disabled = true;
+  sendButton.disabled = true;
+  sendButton.textContent = "PENSANDO...";
+
+  const waiting = document.createElement("div");
+  waiting.className = "msg nexus";
+  waiting.textContent = "NEXUS: Estou pensando...";
+  messages.appendChild(waiting);
+  messages.scrollTop = messages.scrollHeight;
+
+  try {
+    const response = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.reply || "Erro no servidor.");
+    }
+
+    waiting.textContent = "NEXUS: " + data.reply;
+  } catch (error) {
+    waiting.textContent =
+      "NEXUS: Não consegui acessar minha inteligência. Confira se o servidor e o Ollama estão funcionando.";
+    console.error(error);
+  } finally {
+    input.disabled = false;
+    sendButton.disabled = false;
+    sendButton.textContent = "ENVIAR";
+    input.focus();
+    messages.scrollTop = messages.scrollHeight;
+  }
+});
+
+</script>
+</body>
+</html>

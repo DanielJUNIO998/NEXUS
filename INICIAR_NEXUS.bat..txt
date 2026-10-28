@@ -1,0 +1,26 @@
+
+@echo off
+title NEXUS AI - Inicializador
+cd /d "D:\phynton\NEXUS.IA"
+
+echo ======================================
+echo        INICIANDO O NEXUS AI
+echo ======================================
+echo.
+
+echo [1/3] Verificando o Ollama...
+start "NEXUS - Ollama" /min cmd /k "ollama serve"
+
+timeout /t 3 /nobreak >nul
+
+echo [2/3] Iniciando o servidor Flask...
+start "NEXUS - Servidor" /min cmd /k "cd /d D:\phynton\NEXUS.IA && py app.py"
+
+timeout /t 3 /nobreak >nul
+
+echo [3/3] Iniciando o holograma...
+py nexus_hologram.py
+
+echo.
+echo O holograma foi encerrado.
+pause
